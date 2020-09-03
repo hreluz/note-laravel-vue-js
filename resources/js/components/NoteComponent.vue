@@ -17,6 +17,8 @@
                 </span>
                 <p>{{ item.name }}</p>
                 <p>{{ item.description }}</p>
+                <button class="btn btn-danger btn-sm"
+                        @click="deleteNote(item, index)">Delete</button>
             </li>
         </ul>
     </div>
@@ -60,6 +62,12 @@ export default {
                 .then(note => {
                     this.notes.push(note.data);
                 });
+        },
+        deleteNote(item, index) {
+            axios.delete(`/notes/${item.id}`)
+                .then(() => {
+                    this.notes.splice(index, 1);
+                }); 
         }
     }
 }

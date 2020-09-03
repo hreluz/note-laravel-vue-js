@@ -1965,6 +1965,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2000,6 +2002,13 @@ __webpack_require__.r(__webpack_exports__);
       this.note.description = '';
       axios.post('/notes', params).then(function (note) {
         _this2.notes.push(note.data);
+      });
+    },
+    deleteNote: function deleteNote(item, index) {
+      var _this3 = this;
+
+      axios["delete"]("/notes/".concat(item.id)).then(function () {
+        _this3.notes.splice(index, 1);
       });
     }
   }
@@ -37715,7 +37724,20 @@ var render = function() {
           _vm._v(" "),
           _c("p", [_vm._v(_vm._s(item.name))]),
           _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(item.description))])
+          _c("p", [_vm._v(_vm._s(item.description))]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger btn-sm",
+              on: {
+                click: function($event) {
+                  return _vm.deleteNote(item, index)
+                }
+              }
+            },
+            [_vm._v("Delete")]
+          )
         ])
       }),
       0
