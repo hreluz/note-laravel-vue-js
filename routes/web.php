@@ -26,3 +26,4 @@ Auth::routes();
 Route::get('notes', 'NoteController@index')->name('notes.index')->middleware('auth');
 Route::post('notes', 'NoteController@store')->name('notes.store')->middleware('auth');
 Route::delete('notes/{id}', 'NoteController@destroy')->name('notes.destroy')->middleware('auth');
+Route::put('notes/{id}', 'NoteController@update')->name('notes.update')->middleware('auth');

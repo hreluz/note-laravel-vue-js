@@ -1967,6 +1967,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1974,7 +1984,8 @@ __webpack_require__.r(__webpack_exports__);
       note: {
         name: '',
         description: ''
-      }
+      },
+      editing: false
     };
   },
   created: function created() {
@@ -2010,6 +2021,35 @@ __webpack_require__.r(__webpack_exports__);
       axios["delete"]("/notes/".concat(item.id)).then(function () {
         _this3.notes.splice(index, 1);
       });
+    },
+    editForm: function editForm(item) {
+      this.editing = true;
+      this.note.name = item.name;
+      this.note.description = item.description;
+      this.note.id = item.id;
+    },
+    editNote: function editNote(item) {
+      var _this4 = this;
+
+      var params = {
+        name: item.name,
+        description: item.description
+      };
+      axios.put("/notes/".concat(item.id), params).then(function (res) {
+        var index = _this4.notes.findIndex(function (search) {
+          return search.id == res.data.id;
+        });
+
+        _this4.notes[index].name = res.data.name;
+        _this4.notes[index].description = res.data.description;
+
+        _this4.cancelEditing();
+      });
+    },
+    cancelEditing: function cancelEditing() {
+      this.editing = false;
+      this.note.name = '';
+      this.note.description = '';
     }
   }
 });
@@ -37646,66 +37686,138 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", [_vm._v("Add Note: ")]),
-    _vm._v(" "),
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.add($event)
-          }
-        }
-      },
-      [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.note.name,
-              expression: "note.name"
-            }
-          ],
-          staticClass: "form-control mb-2",
-          attrs: { type: "text", placeholder: "Name" },
-          domProps: { value: _vm.note.name },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+    _vm.editing
+      ? _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.editNote(_vm.note)
               }
-              _vm.$set(_vm.note, "name", $event.target.value)
             }
-          }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.note.description,
-              expression: "note.description"
-            }
-          ],
-          staticClass: "form-control mb-2",
-          attrs: { type: "text", placeholder: "Description" },
-          domProps: { value: _vm.note.description },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+          },
+          [
+            _c("h3", [_vm._v("Edit Note: ")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note.name,
+                  expression: "note.name"
+                }
+              ],
+              staticClass: "form-control mb-2",
+              attrs: { type: "text", placeholder: "Name" },
+              domProps: { value: _vm.note.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.note, "name", $event.target.value)
+                }
               }
-              _vm.$set(_vm.note, "description", $event.target.value)
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note.description,
+                  expression: "note.description"
+                }
+              ],
+              staticClass: "form-control mb-2",
+              attrs: { type: "text", placeholder: "Description" },
+              domProps: { value: _vm.note.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.note, "description", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-warning" }, [
+              _vm._v("Update")
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                on: { click: _vm.cancelEditing }
+              },
+              [_vm._v("Cancel")]
+            )
+          ]
+        )
+      : _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.add($event)
+              }
             }
-          }
-        }),
-        _vm._v(" "),
-        _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Add")])
-      ]
-    ),
+          },
+          [
+            _c("h3", [_vm._v("Add Note: ")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note.name,
+                  expression: "note.name"
+                }
+              ],
+              staticClass: "form-control mb-2",
+              attrs: { type: "text", placeholder: "Name" },
+              domProps: { value: _vm.note.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.note, "name", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.note.description,
+                  expression: "note.description"
+                }
+              ],
+              staticClass: "form-control mb-2",
+              attrs: { type: "text", placeholder: "Description" },
+              domProps: { value: _vm.note.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.note, "description", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Add")])
+          ]
+        ),
     _vm._v(" "),
     _c("hr", { staticClass: "mt-3" }),
     _vm._v(" "),
@@ -37737,6 +37849,19 @@ var render = function() {
               }
             },
             [_vm._v("Delete")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-warning btn-sm",
+              on: {
+                click: function($event) {
+                  return _vm.editForm(item)
+                }
+              }
+            },
+            [_vm._v("Edit")]
           )
         ])
       }),
