@@ -1952,6 +1952,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1962,9 +1975,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  created: function created() {
+    var _this = this;
+
+    axios.get('/notes').then(function (res) {
+      _this.notes = res.data;
+    });
+  },
   methods: {
     add: function add() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.note.name.trim() === '' || this.note.description.trim() == '') {
         alert('You must fill all the fields before saving !');
@@ -1979,7 +1999,7 @@ __webpack_require__.r(__webpack_exports__);
       this.note.name = '';
       this.note.description = '';
       axios.post('/notes', params).then(function (note) {
-        _this.notes.push(note);
+        _this2.notes.push(note.data);
       });
     }
   }
@@ -37676,6 +37696,29 @@ var render = function() {
         _vm._v(" "),
         _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Add")])
       ]
+    ),
+    _vm._v(" "),
+    _c("hr", { staticClass: "mt-3" }),
+    _vm._v(" "),
+    _c("h3", [_vm._v("Note list:")]),
+    _vm._v(" "),
+    _c(
+      "ul",
+      { staticClass: "list-group my-2" },
+      _vm._l(_vm.notes, function(item, index) {
+        return _c("li", { key: index, staticClass: "list-group-item" }, [
+          _c("span", { staticClass: "badge badge-primary float-right" }, [
+            _vm._v(
+              "\n                " + _vm._s(item.updated_at) + "\n            "
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(item.name))]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(item.description))])
+        ])
+      }),
+      0
     )
   ])
 }

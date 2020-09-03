@@ -16,7 +16,7 @@ class NoteController extends Controller
     {
         if($request->ajax()) {
         //if ($request->wantsJson()) {
-            return Note::where('user_id', auth()->id()->get());
+            return Note::where('user_id', auth()->id())->get();
         } else {
             return view('home');
         }

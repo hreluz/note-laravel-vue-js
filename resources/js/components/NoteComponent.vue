@@ -6,6 +6,19 @@
             <input v-model="note.description" type="text" placeholder="Description" class="form-control mb-2"> 
             <button class="btn btn-primary">Add</button>
         </form>
+        
+        <hr class="mt-3">
+        <h3>Note list:</h3>
+        <ul class="list-group my-2">
+            <li class="list-group-item" 
+                v-for="(item, index) in notes" :key="index">
+                <span class="badge badge-primary float-right">
+                    {{ item.updated_at}}
+                </span>
+                <p>{{ item.name }}</p>
+                <p>{{ item.description }}</p>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -19,6 +32,12 @@ export default {
                 description: ''
             }
         }
+    },
+    created() {
+        axios.get('/notes')
+            .then( res => {
+                this.notes =  res.data;
+            });
     },
     methods: {
         add() {
@@ -39,7 +58,7 @@ export default {
 
             axios.post('/notes', params)
                 .then(note => {
-                    this.notes.push(note);
+                    this.notes.push(note.data);
                 });
         }
     }
