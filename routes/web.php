@@ -24,3 +24,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::get('notes', 'NoteController@index')->name('notes.index')->middleware('auth');
+Route::post('notes', 'NoteController@store')->name('notes.store')->middleware('auth');
